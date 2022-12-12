@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/javascript-node
+{
+  "name": "Kanban",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  // Configure tool-specific properties.
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+    // "source=${env:HOME}/.Xauthority,target=/home/ubuntu/.Xauthority,type=bind",
+    "source=${env:HOME}/.ssh,target=/home/ubuntu/.ssh,type=bind",
+    "source=${localWorkspaceFolder}/.devcontainer/bash_history,target=/home/ubuntu/.bash_history,type=bind",
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=${env:HOME}/.docker,target=/home/ubuntu/.docker,type=bind",
+    "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=${localWorkspaceFolderBasename}-vendor,target=${containerWorkspaceFolder}/vendor,type=volume"
+  ],
+  //   "containerEnv": {
+  //     "DISPLAY": "172.24.48.1:0.0"
+  //   },
+  "postCreateCommand": "sudo chown -R ubuntu:ubuntu node_modules && sudo chown -R ubuntu:ubuntu vendor",
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "yarn install",
+  // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "ubuntu"
+}
