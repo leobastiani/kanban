@@ -1,6 +1,6 @@
 FROM leobastiani/ubuntu-with-user:22.04
 
-RUN sudo apt update
+RUN sudo apt-get update
 
 RUN sudo apt-get install -y php php-zip composer
 
