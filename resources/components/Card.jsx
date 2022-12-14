@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Cancel, Delete, East, Edit, Save, West } from "@mui/icons-material";
 import { Fab, IconButton } from "@mui/material";
+import DOMPurify from "dompurify";
+import { marked } from "marked";
 import { useCallback, useState } from "react";
 import {
     columnNames,
@@ -40,7 +42,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
             conteudo,
         });
         useIsEditingById.setState(new Set(newValue), true);
-    }, []);
+    }, [titulo, conteudo, id]);
     const handleCancel = useCallback(() => {
         if (isNewCard(id)) {
             useCards.setState(
@@ -52,7 +54,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
         const newValue = new Set([...useIsEditingById.getState()]);
         newValue.delete(id);
         useIsEditingById.setState(newValue, true);
-    }, []);
+    }, [id]);
     const handleSave = useCallback(() => {
         const newValue = new Set([...useIsEditingById.getState()]);
         newValue.delete(id);
@@ -70,7 +72,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
         } else {
             axios.put(`/cards/${id}`, { ...data, lista });
         }
-    }, []);
+    }, [id, lista]);
     const changeEdit = useCallback((propName, newValue) => {
         useEditingById[id].setState({
             ...useEditingById[id].getState(),
@@ -79,11 +81,15 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
     });
     const editingValue = useEditingById[id]();
 
-    const moveHandle = useCallback((direction) => {
-        const newLista = columnNames[columnNames.indexOf(lista) + direction];
-        replaceCard(id, { lista: newLista });
-        axios.put(`/cards/${id}`, { lista: newLista, titulo, conteudo });
-    }, []);
+    const handleMove = useCallback(
+        (direction) => {
+            const newLista =
+                columnNames[columnNames.indexOf(lista) + direction];
+            replaceCard(id, { lista: newLista });
+            axios.put(`/cards/${id}`, { lista: newLista, titulo, conteudo });
+        },
+        [titulo, conteudo, id]
+    );
 
     const deleteHandle = useCallback(() => {
         useCards.setState(
@@ -91,7 +97,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
             true
         );
         axios.delete(`/cards/${id}`);
-    }, []);
+    }, [id]);
 
     return (
         <Container
@@ -135,7 +141,11 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
                         style={{ minHeight: "240px", width: "100%" }}
                     />
                 ) : (
-                    conteudo
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(marked.parse(conteudo)),
+                        }}
+                    />
                 )}
             </div>
             <div style={{ height: "16px" }} />
@@ -162,7 +172,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
                         <Fab
                             size="small"
                             color={isEntered ? "primary" : null}
-                            onClick={() => moveHandle(-1)}
+                            onClick={() => handleMove(-1)}
                             disabled={columnNames.indexOf(lista) == 0}
                         >
                             <West />
@@ -179,7 +189,7 @@ export function Card({ id, isEditing, titulo, conteudo, lista }) {
                         <Fab
                             size="small"
                             color={isEntered ? "primary" : null}
-                            onClick={() => moveHandle(1)}
+                            onClick={() => handleMove(1)}
                             disabled={columnNames.indexOf(lista) == 2}
                         >
                             <East />
