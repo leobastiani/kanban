@@ -16,6 +16,9 @@
       }
     }
   },
+  "runArgs": [
+    "--net=host"
+  ],
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
     // "source=${env:HOME}/.Xauthority,target=/home/ubuntu/.Xauthority,type=bind",

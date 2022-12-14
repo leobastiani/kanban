@@ -6,9 +6,10 @@ RUN sudo apt-get install -y php php-zip composer
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | NODE_VERSION=19.2.0 bash
 
-RUN sudo apt-get install -y php-curl php-xml
+RUN sudo apt-get install -y php-curl php-xml php-mysql
+
 RUN sudo apt-get install -y php-xdebug && \
-  echo -e "xdebug.mode=debug \n\
+  echo "xdebug.mode=debug \n\
 xdebug.client_host=127.0.0.1 \n\
 xdebug.client_port=9003 \n\
 xdebug.start_with_request=yes" | sudo tee -a /etc/php/8.1/cli/conf.d/20-xdebug.ini
