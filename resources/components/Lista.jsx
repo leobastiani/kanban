@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import Typography from "@mui/material/Typography";
-import { Card } from "./Card";
 
 const Container = styled.div`
     padding: 16px;
@@ -18,7 +17,7 @@ const Container = styled.div`
         margin-bottom: 0;
     }
 
-    & > .content {
+    & > .conteudo {
         height: calc(100% - 34px);
         margin-left: -16px;
         margin-right: -16px;
@@ -30,17 +29,14 @@ const Container = styled.div`
     }
 `;
 
-export function Lista() {
+export function Lista({ name, cards }) {
     return (
         <Container>
             <Typography variant="h4" className="header">
-                To Do
+                {name}
             </Typography>
             <hr />
-            <div className="content">
-                <Card />
-                <Card />
-            </div>
+            <div className="conteudo">{cards}</div>
         </Container>
     );
 }

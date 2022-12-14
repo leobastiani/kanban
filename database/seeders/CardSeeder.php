@@ -18,7 +18,7 @@ class CardSeeder extends Seeder
         Card::create([
             "titulo" => "Planejar reunião com equipe",
             "conteudo" => "Definir data e horário para reunião com a equipe para discutir o progresso do projeto atual",
-            "lista" => "To Do"
+            "lista" => "ToDo"
         ]);
 
         Card::create([
